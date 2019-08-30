@@ -1,4 +1,4 @@
-from plasma_core.utils.transactions import decode_utxo_id
+from plasma_core.utils.transactions import decode_utxo_id, output_guard_to_owner
 from plasma_core.constants import NULL_SIGNATURE, CHILD_BLOCK_INTERVAL
 from plasma_core.exceptions import (InvalidBlockSignatureException,
                                     InvalidTxSignatureException,
@@ -67,7 +67,8 @@ class ChildChain(object):
             input_tx = self.get_transaction(i.identifier)
 
             # Check for a valid signature.
-            if tx.signatures[x] == NULL_SIGNATURE or tx.signers[x] != input_tx.outputs[i.oindex].owner:
+            output_guard = input_tx.outputs[i.oindex].output_guard
+            if tx.signatures[x] == NULL_SIGNATURE or tx.signers[x] != output_guard_to_owner(output_guard):
                 raise InvalidTxSignatureException('failed to validate tx')
 
             # Check to see if the input is already spent.
