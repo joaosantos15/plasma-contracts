@@ -1,3 +1,5 @@
+from plasma_core.constants import NULL_BYTE
+
 BLKNUM_OFFSET = 1000000000
 TXINDEX_OFFSET = 10000
 
@@ -16,3 +18,11 @@ def encode_utxo_id(blknum, txindex, oindex):
 def decode_tx_id(utxo_id):
     (blknum, txindex, _) = decode_utxo_id(utxo_id)
     return encode_utxo_id(blknum, txindex, 0)
+
+
+def output_guard_to_owner(guard):
+    return guard[12:]
+
+
+def owner_to_output_guard(owner):
+    return NULL_BYTE * 12 + owner
