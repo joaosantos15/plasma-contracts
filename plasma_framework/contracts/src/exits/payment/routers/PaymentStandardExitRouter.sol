@@ -114,4 +114,9 @@ contract PaymentStandardExitRouter is
     function processStandardExit(uint192 _exitId) internal {
         processStandardExitController.run(standardExitMap, _exitId);
     }
+
+
+    function processExit(uint192 _exitId) external {
+        processStandardExit(_exitId);
+    }
 }

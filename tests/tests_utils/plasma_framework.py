@@ -9,23 +9,53 @@ class PlasmaFramework:
 
         self.plasma_framework.initAuthority()  # initialised by default web3 account
 
-        # deposit verifiers
+        self._setup_deposit_verifiers(get_contract, maintainer)
+        self._setup_vaults(get_contract, maintainer)
+        self._setup_output_guards(get_contract, maintainer)
+        self._setup_spending_conditions(get_contract, maintainer)
+        self._setup_exit_games(get_contract, maintainer)
+
+    def _setup_deposit_verifiers(self, get_contract, maintainer):
         self.eth_deposit_verifier = get_contract('EthDepositVerifier', sender=maintainer)
         self.erc20_deposit_verifier = get_contract('Erc20DepositVerifier', sender=maintainer)
 
-        # vaults setup
+    def _setup_vaults(self, get_contract, maintainer):
         self.eth_vault = get_contract('EthVault', args=(self.plasma_framework.address,), sender=maintainer)
         self.erc20_vault = get_contract('Erc20Vault', args=(self.plasma_framework.address,), sender=maintainer)
-
         self.eth_vault.setDepositVerifier(self.eth_deposit_verifier.address, **{"from": maintainer.address})
         self.plasma_framework.registerVault(1, self.eth_vault.address, **{"from": maintainer.address})
-
         self.erc20_vault.setDepositVerifier(self.erc20_deposit_verifier.address, **{"from": maintainer.address})
         self.plasma_framework.registerVault(2, self.erc20_vault.address, **{"from": maintainer.address})
-    
-        # exit games
-        self.payment_standard_exit_game = get_contract()
 
+    def _setup_spending_conditions(self, get_contract, maintainer):
+        pass
+
+    def _setup_output_guards(self, get_contract, maintainer):
+        pass
+
+    def _setup_exit_games(self, get_contract, maintainer):
+        self.standard_exit_router = self._get_standard_exit_router(get_contract, maintainer)
+
+    def _get_standard_exit_router(self, get_contract, maintainer):
+        start_exit_lib = get_contract('PaymentStartStandardExit', sender=maintainer)
+        challenge_exit_lib = get_contract('PaymentChallengeStandardExit', sender=maintainer)
+        process_exit_lib = get_contract('PaymentProcessStandardExit', sender=maintainer)
+
+        from plasma_core.constants import NULL_ADDRESS
+        payment_standard_exit_router = get_contract("PaymentStandardExitRouter",
+                                                    sender=maintainer,
+                                                    args=(self.plasma_framework.address,
+                                                          self.eth_vault.address,
+                                                          self.erc20_vault.address,
+                                                          NULL_ADDRESS,
+                                                          NULL_ADDRESS),
+                                                    libraries={
+                                                         "PaymentStartStandardExit": start_exit_lib.address,
+                                                         "PaymentChallengeStandardExit": challenge_exit_lib.address,
+                                                         "PaymentProcessStandardExit": process_exit_lib.address,
+                                                        }
+                                                    )
+        return payment_standard_exit_router
 
     def blocks(self, block):
         return self.plasma_framework.blocks(block)
@@ -116,3 +146,6 @@ class PlasmaFramework:
 
     def childBlockInterval(self):
         return self.plasma_framework.childBlockInterval()
+
+    def standardExitBond(self):
+        return self.standard_exit_router.INITIAL_BOND_SIZE()
