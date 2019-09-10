@@ -22,6 +22,10 @@ class PlasmaFramework:
 
         self.erc20_vault.setDepositVerifier(self.erc20_deposit_verifier.address, **{"from": maintainer.address})
         self.plasma_framework.registerVault(2, self.erc20_vault.address, **{"from": maintainer.address})
+    
+        # exit games
+        self.payment_standard_exit_game = get_contract()
+
 
     def blocks(self, block):
         return self.plasma_framework.blocks(block)

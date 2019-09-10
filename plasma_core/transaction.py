@@ -13,6 +13,10 @@ class TxTypes(enum.Enum):
     PAYMENT = 1
 
 
+class TxOuputTypes(enum.Enum):
+    PAYMENT = 0
+
+
 class TransactionInput:
     def __init__(self, blknum=0, txindex=0, oindex=0):
         self.blknum = blknum
