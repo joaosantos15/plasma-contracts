@@ -30,7 +30,7 @@ lint:
 
 .PHONY: test
 test:
-	python -m pytest -m "not slow"
+	python -m pytest tests/contracts/root_chain/test_submit_block.py
 	rm -fr .pytest_cache
 
 .PHONY: test_quick
