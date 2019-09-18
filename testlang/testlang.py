@@ -120,20 +120,19 @@ class TestingLanguage:
         self.accounts = accounts
         self.operator = self.accounts[0]
         self.child_chain = ChildChain(operator=self.operator)
-
-        # TODO: collect events from all contracts
-        # self.events_filter = w3.eth.filter({'address': root_chain.address, 'fromBlock': 'latest'})
+        self.events_filters: dict = plasma_framework.event_filters(w3)
 
     def flush_events(self):
-        logs = self.events_filter.get_new_entries()
+        logs = [(contract, event_filter.get_new_entries()) for contract, event_filter in self.events_filters.values()]
         events = []
-        contract_events = self.root_chain.get_contract_events()
-        for contract_event in contract_events:
-            for log in logs:
-                try:
-                    events.append(contract_event().processLog(log))
-                except MismatchedABI:
-                    pass
+        for contract, contract_logs in logs:
+            contract_events = contract.get_contract_events()
+            for contract_event in contract_events:
+                for log in contract_logs:
+                    try:
+                        events.append((contract.address, contract_event().processLog(log)))
+                    except MismatchedABI:
+                        pass
         return events
 
     def submit_block(self, transactions, signer=None, force_invalid=False):

@@ -11,7 +11,7 @@ import "../../vaults/Erc20Vault.sol";
 import "../interfaces/IStateTransitionVerifier.sol";
 import "../../utils/OnlyFromAddress.sol";
 
-contract PaymentExitGame is IExitProcessor, PaymentStandardExitRouter, PaymentInFlightExitRouter, OnlyFromAddress {
+contract PaymentExitGame is PaymentStandardExitRouter, PaymentInFlightExitRouter, OnlyFromAddress {
 
     PlasmaFramework private plasmaFramework;
 

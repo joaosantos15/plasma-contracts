@@ -1,9 +1,12 @@
 import enum
 
+from web3.exceptions import MismatchedABI
+
 from plasma_core.constants import CHILD_BLOCK_INTERVAL
 from plasma_core.transaction import TxOutputTypes, TxTypes
 from plasma_core.utils.transactions import decode_utxo_id
 from .constants import EXIT_PERIOD, INITIAL_IMMUNE_EXIT_GAMES, INITIAL_IMMUNE_VAULTS
+from .convenience_wrappers import ConvenienceContractWrapper
 
 
 class Protocols(enum.Enum):
@@ -54,6 +57,7 @@ class PlasmaFramework:
 
     def _setup_exit_games(self, get_contract, maintainer):
         self.payment_exit_game = self._get_payment_exit_game(get_contract, maintainer)
+
         self.plasma_framework.registerExitGame(TxTypes.PAYMENT.value,
                                                self.payment_exit_game.address,
                                                Protocols.MoreVP.value,
@@ -76,9 +80,32 @@ class PlasmaFramework:
                                              "PaymentStartStandardExit": start_exit_lib.address,
                                              "PaymentChallengeStandardExit": challenge_exit_lib.address,
                                              "PaymentProcessStandardExit": process_exit_lib.address,
-                                         }
-                                         )
+                                         })
+
+        # collect events emitted by libraries
+        for lib in [start_exit_lib, challenge_exit_lib, process_exit_lib]:
+            lib_events = lib.get_contract_events()
+            for event in lib_events:
+                try:
+                    if hasattr(payment_exit_game.events, event.event_name):
+                        raise AttributeError(event.event_name)
+                except MismatchedABI:
+                    pass
+                finally:
+                    setattr(payment_exit_game.events, event.event_name, event)
+            payment_exit_game.events._events += lib.events._events
         return payment_exit_game
+
+    def event_filters(self, w3):
+        filters = dict()
+
+        for attribute in dir(self):
+            attribute = getattr(self, attribute)
+            if isinstance(attribute, ConvenienceContractWrapper):
+                contract_filter = w3.eth.filter({'address': attribute.address, 'fromBlock': 'latest'})
+                filters[attribute.address] = attribute, contract_filter
+
+        return filters
 
     def blocks(self, block):
         return self.plasma_framework.blocks(block)
@@ -139,11 +166,7 @@ class PlasmaFramework:
         raise NotImplementedError
 
     def processExits(self, token, top_exit_id, exits_to_process):
-        next_exit_id = top_exit_id if top_exit_id != 0 else self.getNextExit(token)
-
-        tx1_hash = self.plasma_framework.processExits(token, top_exit_id, exits_to_process)
-        tx2_hash = self.payment_exit_game.processExit(next_exit_id)
-        return tx1_hash, tx2_hash
+        return self.plasma_framework.processExits(token, top_exit_id, exits_to_process)
 
     def getInFlightExitId(self, tx):
         raise NotImplementedError
@@ -184,3 +207,8 @@ class PlasmaFramework:
 
     def exits(self, exit_id):
         return self.payment_exit_game.standardExits(exit_id)
+
+    ### additional convenience proxies (not taken from RootChain) ###
+
+    def isOutputSpent(self, utxo_pos):
+        return self.plasma_framework.isOutputSpent(utxo_pos)
