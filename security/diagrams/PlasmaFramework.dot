@@ -1,0 +1,198 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterBlockController" {
+  graph [ label = "BlockController", color = "lightgray", style = "filled" ];
+  "BlockController.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "BlockController.initAuthority" [ label = "initAuthority", color = "blue" ];
+  "BlockController.setAuthority" [ label = "setAuthority", color = "blue" ];
+  "BlockController.submitBlock" [ label = "submitBlock", color = "blue" ];
+  "BlockController.submitDepositBlock" [ label = "submitDepositBlock", color = "green" ];
+}
+
+subgraph "clusterExitGameController" {
+  graph [ label = "ExitGameController", color = "lightgray", style = "filled" ];
+  "ExitGameController.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ExitGameController.addToken" [ label = "addToken", color = "blue" ];
+  "ExitGameController.hasToken" [ label = "hasToken" ];
+  "ExitGameController.enqueue" [ label = "enqueue", color = "blue" ];
+  "ExitGameController.processExits" [ label = "processExits", color = "blue" ];
+  "ExitGameController.isAnyOutputsSpent" [ label = "isAnyOutputsSpent", color = "blue" ];
+  "ExitGameController.batchFlagOutputsSpent" [ label = "batchFlagOutputsSpent", color = "blue" ];
+  "ExitGameController.flagOutputSpent" [ label = "flagOutputSpent", color = "blue" ];
+}
+
+subgraph "clusterPlasmaFramework" {
+  graph [ label = "PlasmaFramework", color = "lightgray", style = "filled" ];
+  "PlasmaFramework.<Constructor>" [ label = "<Constructor>", color = "green" ];
+}
+
+subgraph "clusterProtocol" {
+  graph [ label = "Protocol", color = "lightgray", style = "filled" ];
+  "Protocol.MVP" [ label = "MVP", color = "white" ];
+  "Protocol.MORE_VP" [ label = "MORE_VP", color = "white" ];
+  "Protocol.isValidProtocol" [ label = "isValidProtocol" ];
+}
+
+subgraph "clusterIExitProcessor" {
+  graph [ label = "IExitProcessor", color = "lightgray", style = "filled" ];
+  "IExitProcessor.processExit" [ label = "processExit", color = "blue" ];
+}
+
+subgraph "clusterBlockModel" {
+  graph [ label = "BlockModel", color = "lightgray", style = "filled" ];
+  "BlockModel.Block" [ label = "Block" ];
+}
+
+subgraph "clusterExitGameRegistry" {
+  graph [ label = "ExitGameRegistry", color = "lightgray", style = "filled" ];
+  "ExitGameRegistry.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "ExitGameRegistry.onlyFromNonQuarantinedExitGame" [ label = "onlyFromNonQuarantinedExitGame", color = "yellow" ];
+  "ExitGameRegistry.isExitGameSafeToUse" [ label = "isExitGameSafeToUse", color = "green" ];
+  "ExitGameRegistry.registerExitGame" [ label = "registerExitGame", color = "green" ];
+  "ExitGameRegistry.protocols" [ label = "protocols", color = "green" ];
+  "ExitGameRegistry.exitGames" [ label = "exitGames", color = "green" ];
+  "ExitGameRegistry.exitGameToTxType" [ label = "exitGameToTxType", color = "green" ];
+}
+
+subgraph "clusterVaultRegistry" {
+  graph [ label = "VaultRegistry", color = "lightgray", style = "filled" ];
+  "VaultRegistry.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "VaultRegistry.onlyFromNonQuarantinedVault" [ label = "onlyFromNonQuarantinedVault", color = "yellow" ];
+  "VaultRegistry.registerVault" [ label = "registerVault", color = "green" ];
+  "VaultRegistry.vaults" [ label = "vaults", color = "green" ];
+  "VaultRegistry.vaultToId" [ label = "vaultToId", color = "green" ];
+}
+
+subgraph "clusterExitPriority" {
+  graph [ label = "ExitPriority", color = "lightgray", style = "filled" ];
+  "ExitPriority.computePriority" [ label = "computePriority", color = "white" ];
+  "ExitPriority.parseExitableAt" [ label = "parseExitableAt", color = "white" ];
+}
+
+subgraph "clusterOperated" {
+  graph [ label = "Operated", color = "lightgray", style = "filled" ];
+  "Operated.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "Operated.onlyOperator" [ label = "onlyOperator", color = "yellow" ];
+  "Operated.operator" [ label = "operator", color = "green" ];
+}
+
+subgraph "clusterPriorityQueue" {
+  graph [ label = "PriorityQueue", color = "lightgray", style = "filled" ];
+  "PriorityQueue.insert" [ label = "insert", color = "blue" ];
+  "PriorityQueue.currentSize" [ label = "currentSize", color = "blue" ];
+  "PriorityQueue.getMin" [ label = "getMin", color = "blue" ];
+  "PriorityQueue.delMin" [ label = "delMin", color = "blue" ];
+  "PriorityQueue.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "PriorityQueue.heapList" [ label = "heapList", color = "blue" ];
+  "PriorityQueue.percUp" [ label = "percUp" ];
+  "PriorityQueue.percDown" [ label = "percDown" ];
+  "PriorityQueue.minChild" [ label = "minChild" ];
+}
+
+subgraph "clusterQuarantine" {
+  graph [ label = "Quarantine", color = "lightgray", style = "filled" ];
+  "Quarantine.isQuarantined" [ label = "isQuarantined", color = "white" ];
+  "Quarantine.quarantine" [ label = "quarantine", color = "white" ];
+}
+
+subgraph "clusterQuarantine.Data" {
+  graph [ label = "Quarantine.Data", color = "lightgray" ];
+  "Quarantine.Data.isQuarantined" [ label = "isQuarantined" ];
+  "Quarantine.Data.quarantine" [ label = "quarantine" ];
+}
+
+subgraph "clusteri" {
+  graph [ label = "i", color = "lightgray" ];
+  "i.div" [ label = "div" ];
+  "i.mul" [ label = "mul" ];
+}
+
+  "BlockController.submitBlock";
+  "BlockModel.Block";
+  "BlockController.submitDepositBlock";
+  "ExitGameController.addToken";
+  "ExitGameController.hasToken";
+  "ExitGameController.enqueue";
+  "ExitPriority.computePriority";
+  "PriorityQueue.insert";
+  "ExitGameController.processExits";
+  "PriorityQueue.currentSize";
+  "PriorityQueue.getMin";
+  "ExitPriority.parseExitableAt";
+  "IExitProcessor.processExit";
+  "PriorityQueue.delMin";
+  "ExitGameRegistry.onlyFromNonQuarantinedExitGame";
+  "Quarantine.Data.isQuarantined";
+  "ExitGameRegistry.isExitGameSafeToUse";
+  "ExitGameRegistry.registerExitGame";
+  "Protocol.isValidProtocol";
+  "Quarantine.Data.quarantine";
+  "VaultRegistry.onlyFromNonQuarantinedVault";
+  "VaultRegistry.registerVault";
+  "PriorityQueue.percUp";
+  "PriorityQueue.percDown";
+  "i.div";
+  "PriorityQueue.minChild";
+  "i.mul";
+  "BlockController.submitBlock" -> "BlockModel.Block" [ color = "orange" ];
+  "BlockController.submitDepositBlock" -> "BlockModel.Block" [ color = "orange" ];
+  "ExitGameController.addToken" -> "ExitGameController.hasToken" [ color = "green" ];
+  "ExitGameController.enqueue" -> "ExitGameController.hasToken" [ color = "green" ];
+  "ExitGameController.enqueue" -> "ExitPriority.computePriority" [ color = "orange" ];
+  "ExitGameController.enqueue" -> "PriorityQueue.insert" [ color = "orange" ];
+  "ExitGameController.processExits" -> "ExitGameController.hasToken" [ color = "green" ];
+  "ExitGameController.processExits" -> "PriorityQueue.currentSize" [ color = "orange" ];
+  "ExitGameController.processExits" -> "PriorityQueue.getMin" [ color = "orange" ];
+  "ExitGameController.processExits" -> "ExitPriority.parseExitableAt" [ color = "orange" ];
+  "ExitGameController.processExits" -> "IExitProcessor.processExit" [ color = "orange" ];
+  "ExitGameController.processExits" -> "PriorityQueue.delMin" [ color = "orange" ];
+  "ExitGameController.processExits" -> "PriorityQueue.currentSize" [ color = "orange" ];
+  "ExitGameController.processExits" -> "PriorityQueue.getMin" [ color = "orange" ];
+  "ExitGameRegistry.onlyFromNonQuarantinedExitGame" -> "Quarantine.Data.isQuarantined" [ color = "orange" ];
+  "ExitGameRegistry.isExitGameSafeToUse" -> "Quarantine.Data.isQuarantined" [ color = "orange" ];
+  "ExitGameRegistry.registerExitGame" -> "Protocol.isValidProtocol" [ color = "orange" ];
+  "ExitGameRegistry.registerExitGame" -> "Quarantine.Data.quarantine" [ color = "orange" ];
+  "VaultRegistry.onlyFromNonQuarantinedVault" -> "Quarantine.Data.isQuarantined" [ color = "orange" ];
+  "VaultRegistry.registerVault" -> "Quarantine.Data.quarantine" [ color = "orange" ];
+  "PriorityQueue.insert" -> "PriorityQueue.percUp" [ color = "green" ];
+  "PriorityQueue.delMin" -> "PriorityQueue.percDown" [ color = "green" ];
+  "PriorityQueue.percUp" -> "i.div" [ color = "orange" ];
+  "PriorityQueue.percUp" -> "i.div" [ color = "orange" ];
+  "PriorityQueue.percUp" -> "i.div" [ color = "orange" ];
+  "PriorityQueue.percDown" -> "PriorityQueue.minChild" [ color = "green" ];
+  "PriorityQueue.percDown" -> "PriorityQueue.minChild" [ color = "green" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "orange" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "orange" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "orange" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "orange" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "orange" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color=green]
+key:i2:e -> key2:i2:w [color=orange]
+}
+}
+

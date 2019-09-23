@@ -1,0 +1,346 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true, bgcolor = "#2e3e56" ];
+  node [ style = "filled", fillcolor = "#edad56", color = "#edad56", penwidth =3 ];
+  edge [ color = "#fcfcfc", penwidth =2, fontname = "helvetica Neue Ultra Light" ];
+subgraph "clusterErc20Vault" {
+  graph [ label = "Erc20Vault", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Erc20Vault.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Erc20Vault.deposit" [ label = "deposit", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Erc20Vault.withdraw" [ label = "withdraw", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "Erc20Vault.getEffectiveDepositVerifier" [ label = "getEffectiveDepositVerifier" ];
+}
+
+subgraph "clusterVault" {
+  graph [ label = "Vault", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Vault._submitDepositBlock" [ label = "_submitDepositBlock", color = "#f2c383", fillcolor = "#f2c383" ];
+  "Vault.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Vault.onlyFromNonQuarantinedExitGame" [ label = "onlyFromNonQuarantinedExitGame", color = "#1bc6a6", shape =doubleoctagon ];
+  "Vault.setDepositVerifier" [ label = "setDepositVerifier", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Vault.getEffectiveDepositVerifier" [ label = "getEffectiveDepositVerifier" ];
+}
+
+subgraph "clusterZeroHashesProvider" {
+  graph [ label = "ZeroHashesProvider  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "ZeroHashesProvider.getZeroHashes" [ label = "getZeroHashes", color = "#f2c383", fillcolor = "#f2c383" ];
+}
+
+subgraph "clusterPlasmaFramework" {
+  graph [ label = "PlasmaFramework", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "PlasmaFramework.submitDepositBlock" [ label = "submitDepositBlock" ];
+  "PlasmaFramework.minExitPeriod" [ label = "minExitPeriod" ];
+  "PlasmaFramework.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+}
+
+subgraph "clusterBlockController" {
+  graph [ label = "BlockController", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "BlockController.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "BlockController.initAuthority" [ label = "initAuthority", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "BlockController.setAuthority" [ label = "setAuthority", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "BlockController.submitBlock" [ label = "submitBlock", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "BlockController.submitDepositBlock" [ label = "submitDepositBlock", color = "#FF9797", fillcolor = "#FF9797" ];
+}
+
+subgraph "clusterBlockModel" {
+  graph [ label = "BlockModel  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "BlockModel.Block" [ label = "Block" ];
+}
+
+subgraph "clusterVaultRegistry" {
+  graph [ label = "VaultRegistry", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "VaultRegistry.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "VaultRegistry.onlyFromNonQuarantinedVault" [ label = "onlyFromNonQuarantinedVault", color = "#1bc6a6", shape =doubleoctagon ];
+  "VaultRegistry.registerVault" [ label = "registerVault", color = "#FF9797", fillcolor = "#FF9797" ];
+  "VaultRegistry.vaults" [ label = "vaults", color = "#FF9797", fillcolor = "#FF9797" ];
+  "VaultRegistry.vaultToId" [ label = "vaultToId", color = "#FF9797", fillcolor = "#FF9797" ];
+}
+
+subgraph "clusterOperated" {
+  graph [ label = "Operated", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Operated.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Operated.onlyOperator" [ label = "onlyOperator", color = "#1bc6a6", shape =doubleoctagon ];
+  "Operated.operator" [ label = "operator", color = "#FF9797", fillcolor = "#FF9797" ];
+}
+
+subgraph "clusterQuarantine" {
+  graph [ label = "Quarantine  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Quarantine.isQuarantined" [ label = "isQuarantined", color = "#f2c383", fillcolor = "#f2c383" ];
+  "Quarantine.quarantine" [ label = "quarantine", color = "#f2c383", fillcolor = "#f2c383" ];
+}
+
+subgraph "clusterExitGameController" {
+  graph [ label = "ExitGameController", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "ExitGameController.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "ExitGameController.addToken" [ label = "addToken", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "ExitGameController.hasToken" [ label = "hasToken" ];
+  "ExitGameController.enqueue" [ label = "enqueue", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "ExitGameController.processExits" [ label = "processExits", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "ExitGameController.isAnyOutputsSpent" [ label = "isAnyOutputsSpent", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "ExitGameController.batchFlagOutputsSpent" [ label = "batchFlagOutputsSpent", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "ExitGameController.flagOutputSpent" [ label = "flagOutputSpent", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+}
+
+subgraph "clusterIExitProcessor" {
+  graph [ label = "IExitProcessor  (iface)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "IExitProcessor.processExit" [ label = "processExit", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+}
+
+subgraph "clusterExitGameRegistry" {
+  graph [ label = "ExitGameRegistry", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "ExitGameRegistry.isExitGameSafeToUse" [ label = "isExitGameSafeToUse", color = "#FF9797", fillcolor = "#FF9797" ];
+  "ExitGameRegistry.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "ExitGameRegistry.onlyFromNonQuarantinedExitGame" [ label = "onlyFromNonQuarantinedExitGame", color = "#1bc6a6", shape =doubleoctagon ];
+  "ExitGameRegistry.registerExitGame" [ label = "registerExitGame", color = "#FF9797", fillcolor = "#FF9797" ];
+  "ExitGameRegistry.protocols" [ label = "protocols", color = "#FF9797", fillcolor = "#FF9797" ];
+  "ExitGameRegistry.exitGames" [ label = "exitGames", color = "#FF9797", fillcolor = "#FF9797" ];
+  "ExitGameRegistry.exitGameToTxType" [ label = "exitGameToTxType", color = "#FF9797", fillcolor = "#FF9797" ];
+}
+
+subgraph "clusterProtocol" {
+  graph [ label = "Protocol  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Protocol.isValidProtocol" [ label = "isValidProtocol", color = "#f2c383", fillcolor = "#f2c383" ];
+  "Protocol.MVP" [ label = "MVP", color = "#f2c383", fillcolor = "#f2c383" ];
+  "Protocol.MORE_VP" [ label = "MORE_VP", color = "#f2c383", fillcolor = "#f2c383" ];
+}
+
+subgraph "clusterPriorityQueue" {
+  graph [ label = "PriorityQueue", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "PriorityQueue.insert" [ label = "insert", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "PriorityQueue.currentSize" [ label = "currentSize", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "PriorityQueue.getMin" [ label = "getMin", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "PriorityQueue.delMin" [ label = "delMin", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "PriorityQueue.<Constructor>" [ label = "<Constructor>", color = "#FF9797", fillcolor = "#FF9797" ];
+  "PriorityQueue.heapList" [ label = "heapList", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "PriorityQueue.percUp" [ label = "percUp" ];
+  "PriorityQueue.percDown" [ label = "percDown" ];
+  "PriorityQueue.minChild" [ label = "minChild" ];
+}
+
+subgraph "clusterOwnable" {
+  graph [ label = "Ownable", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Ownable.<Constructor>" [ label = "<Constructor>", color = "#f2c383", fillcolor = "#f2c383" ];
+  "Ownable.owner" [ label = "owner", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Ownable.onlyOwner" [ label = "onlyOwner", color = "#1bc6a6", shape =doubleoctagon ];
+  "Ownable.isOwner" [ label = "isOwner" ];
+  "Ownable.renounceOwnership" [ label = "renounceOwnership", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Ownable.transferOwnership" [ label = "transferOwnership", color = "#FF9797", fillcolor = "#FF9797" ];
+  "Ownable._transferOwnership" [ label = "_transferOwnership" ];
+}
+
+subgraph "clusterSafeMath" {
+  graph [ label = "SafeMath  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "SafeMath.add" [ label = "add", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeMath.sub" [ label = "sub", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeMath.mul" [ label = "mul", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeMath.div" [ label = "div", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeMath.mod" [ label = "mod", color = "#f2c383", fillcolor = "#f2c383" ];
+}
+
+subgraph "clusterExitPriority" {
+  graph [ label = "ExitPriority  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "ExitPriority.computePriority" [ label = "computePriority", color = "#f2c383", fillcolor = "#f2c383" ];
+  "ExitPriority.parseExitableAt" [ label = "parseExitableAt", color = "#f2c383", fillcolor = "#f2c383" ];
+}
+
+subgraph "clusterTxPosLib" {
+  graph [ label = "TxPosLib  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "TxPosLib.blockNum" [ label = "blockNum", color = "#f2c383", fillcolor = "#f2c383" ];
+  "TxPosLib.txIndex" [ label = "txIndex", color = "#f2c383", fillcolor = "#f2c383" ];
+}
+
+subgraph "clusterIErc20DepositVerifier" {
+  graph [ label = "IErc20DepositVerifier  (iface)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "IErc20DepositVerifier.verify" [ label = "verify", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+}
+
+subgraph "clusterIERC20" {
+  graph [ label = "IERC20  (iface)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "IERC20.safeTransferFrom" [ label = "safeTransferFrom" ];
+  "IERC20.safeTransfer" [ label = "safeTransfer" ];
+  "IERC20.totalSupply" [ label = "totalSupply", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "IERC20.balanceOf" [ label = "balanceOf", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "IERC20.transfer" [ label = "transfer", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "IERC20.allowance" [ label = "allowance" ];
+  "IERC20.approve" [ label = "approve", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "IERC20.transferFrom" [ label = "transferFrom", color = "#ffbdb9", fillcolor = "#ffbdb9" ];
+  "IERC20.isContract" [ label = "isContract" ];
+  "IERC20.call" [ label = "call" ];
+}
+
+subgraph "clusterSafeERC20" {
+  graph [ label = "SafeERC20  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "SafeERC20.safeTransfer" [ label = "safeTransfer", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeERC20.safeTransferFrom" [ label = "safeTransferFrom", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeERC20.safeApprove" [ label = "safeApprove", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeERC20.safeIncreaseAllowance" [ label = "safeIncreaseAllowance", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeERC20.safeDecreaseAllowance" [ label = "safeDecreaseAllowance", color = "#f2c383", fillcolor = "#f2c383" ];
+  "SafeERC20.callOptionalReturn" [ label = "callOptionalReturn" ];
+}
+
+subgraph "clusterAddress" {
+  graph [ label = "Address  (lib)", color = "#445773", fontcolor = "#f0f0f0", style = "rounded", bgcolor = "#445773" ];
+  "Address.isContract" [ label = "isContract", color = "#f2c383", fillcolor = "#f2c383" ];
+}
+
+subgraph "clusterQuarantine.Data" {
+  graph [ label = "Quarantine.Data", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "Quarantine.Data.isQuarantined" [ label = "isQuarantined" ];
+  "Quarantine.Data.quarantine" [ label = "quarantine" ];
+}
+
+subgraph "clusteri" {
+  graph [ label = "i", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "i.div" [ label = "div" ];
+  "i.mul" [ label = "mul" ];
+}
+
+subgraph "clusterabi" {
+  graph [ label = "abi", color = "#e8726d", fontcolor = "#f0f0f0", style = "rounded,dashed", bgcolor = "#3b4b63" ];
+  "abi.encodeWithSelector" [ label = "encodeWithSelector" ];
+  "abi.decode" [ label = "decode" ];
+}
+
+  "Erc20Vault.deposit";
+  "IErc20DepositVerifier.verify";
+  "Erc20Vault.getEffectiveDepositVerifier";
+  "IERC20.safeTransferFrom";
+  "Vault._submitDepositBlock";
+  "Erc20Vault.withdraw";
+  "IERC20.safeTransfer";
+  "Vault.null";
+  "ZeroHashesProvider.getZeroHashes";
+  "Vault.onlyFromNonQuarantinedExitGame";
+  "ExitGameRegistry.isExitGameSafeToUse";
+  "PlasmaFramework.submitDepositBlock";
+  "Vault.setDepositVerifier";
+  "Vault.getEffectiveDepositVerifier";
+  "PlasmaFramework.minExitPeriod";
+  "BlockController.submitBlock";
+  "BlockModel.Block";
+  "BlockController.submitDepositBlock";
+  "VaultRegistry.onlyFromNonQuarantinedVault";
+  "Quarantine.Data.isQuarantined";
+  "VaultRegistry.registerVault";
+  "Quarantine.Data.quarantine";
+  "ExitGameController.addToken";
+  "ExitGameController.hasToken";
+  "ExitGameController.enqueue";
+  "ExitPriority.computePriority";
+  "PriorityQueue.insert";
+  "ExitGameController.processExits";
+  "PriorityQueue.currentSize";
+  "PriorityQueue.getMin";
+  "ExitPriority.parseExitableAt";
+  "IExitProcessor.processExit";
+  "PriorityQueue.delMin";
+  "ExitGameRegistry.onlyFromNonQuarantinedExitGame";
+  "ExitGameRegistry.registerExitGame";
+  "Protocol.isValidProtocol";
+  "PriorityQueue.percUp";
+  "PriorityQueue.percDown";
+  "i.div";
+  "PriorityQueue.minChild";
+  "i.mul";
+  "Ownable.onlyOwner";
+  "Ownable.isOwner";
+  "Ownable.transferOwnership";
+  "Ownable._transferOwnership";
+  "SafeERC20.safeTransfer";
+  "SafeERC20.callOptionalReturn";
+  "abi.encodeWithSelector";
+  "SafeERC20.safeTransferFrom";
+  "SafeERC20.safeApprove";
+  "IERC20.allowance";
+  "SafeERC20.safeIncreaseAllowance";
+  "SafeERC20.safeDecreaseAllowance";
+  "IERC20.isContract";
+  "IERC20.call";
+  "abi.decode";
+  "Erc20Vault.deposit" -> "IErc20DepositVerifier.verify" [ color = "white" ];
+  "Erc20Vault.deposit" -> "Erc20Vault.getEffectiveDepositVerifier" [ color = "#1bc6a6" ];
+  "Erc20Vault.deposit" -> "IERC20.safeTransferFrom" [ color = "white" ];
+  "Erc20Vault.deposit" -> "Vault._submitDepositBlock" [ color = "white" ];
+  "Erc20Vault.withdraw" -> "IERC20.safeTransfer" [ color = "white" ];
+  "Vault.null" -> "ZeroHashesProvider.getZeroHashes" [ color = "white" ];
+  "Vault.onlyFromNonQuarantinedExitGame" -> "ExitGameRegistry.isExitGameSafeToUse" [ color = "white" ];
+  "Vault._submitDepositBlock" -> "PlasmaFramework.submitDepositBlock" [ color = "white" ];
+  "Vault.setDepositVerifier" -> "Vault.getEffectiveDepositVerifier" [ color = "#1bc6a6" ];
+  "Vault.setDepositVerifier" -> "PlasmaFramework.minExitPeriod" [ color = "white" ];
+  "BlockController.submitBlock" -> "BlockModel.Block" [ color = "white" ];
+  "BlockController.submitDepositBlock" -> "BlockModel.Block" [ color = "white" ];
+  "VaultRegistry.onlyFromNonQuarantinedVault" -> "Quarantine.Data.isQuarantined" [ color = "white" ];
+  "VaultRegistry.registerVault" -> "Quarantine.Data.quarantine" [ color = "white" ];
+  "ExitGameController.addToken" -> "ExitGameController.hasToken" [ color = "#1bc6a6" ];
+  "ExitGameController.enqueue" -> "ExitGameController.hasToken" [ color = "#1bc6a6" ];
+  "ExitGameController.enqueue" -> "ExitPriority.computePriority" [ color = "white" ];
+  "ExitGameController.enqueue" -> "PriorityQueue.insert" [ color = "white" ];
+  "ExitGameController.processExits" -> "ExitGameController.hasToken" [ color = "#1bc6a6" ];
+  "ExitGameController.processExits" -> "PriorityQueue.currentSize" [ color = "white" ];
+  "ExitGameController.processExits" -> "PriorityQueue.getMin" [ color = "white" ];
+  "ExitGameController.processExits" -> "ExitPriority.parseExitableAt" [ color = "white" ];
+  "ExitGameController.processExits" -> "IExitProcessor.processExit" [ color = "white" ];
+  "ExitGameController.processExits" -> "PriorityQueue.delMin" [ color = "white" ];
+  "ExitGameController.processExits" -> "PriorityQueue.currentSize" [ color = "white" ];
+  "ExitGameController.processExits" -> "PriorityQueue.getMin" [ color = "white" ];
+  "ExitGameRegistry.onlyFromNonQuarantinedExitGame" -> "Quarantine.Data.isQuarantined" [ color = "white" ];
+  "ExitGameRegistry.isExitGameSafeToUse" -> "Quarantine.Data.isQuarantined" [ color = "white" ];
+  "ExitGameRegistry.registerExitGame" -> "Protocol.isValidProtocol" [ color = "white" ];
+  "ExitGameRegistry.registerExitGame" -> "Quarantine.Data.quarantine" [ color = "white" ];
+  "PriorityQueue.insert" -> "PriorityQueue.percUp" [ color = "#1bc6a6" ];
+  "PriorityQueue.delMin" -> "PriorityQueue.percDown" [ color = "#1bc6a6" ];
+  "PriorityQueue.percUp" -> "i.div" [ color = "white" ];
+  "PriorityQueue.percUp" -> "i.div" [ color = "white" ];
+  "PriorityQueue.percUp" -> "i.div" [ color = "white" ];
+  "PriorityQueue.percDown" -> "PriorityQueue.minChild" [ color = "#1bc6a6" ];
+  "PriorityQueue.percDown" -> "PriorityQueue.minChild" [ color = "#1bc6a6" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "white" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "white" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "white" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "white" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "white" ];
+  "PriorityQueue.minChild" -> "i.mul" [ color = "white" ];
+  "Ownable.onlyOwner" -> "Ownable.isOwner" [ color = "#1bc6a6" ];
+  "Ownable.transferOwnership" -> "Ownable._transferOwnership" [ color = "#1bc6a6" ];
+  "SafeERC20.safeTransfer" -> "SafeERC20.callOptionalReturn" [ color = "#1bc6a6" ];
+  "SafeERC20.safeTransfer" -> "abi.encodeWithSelector" [ color = "white" ];
+  "SafeERC20.safeTransferFrom" -> "SafeERC20.callOptionalReturn" [ color = "#1bc6a6" ];
+  "SafeERC20.safeTransferFrom" -> "abi.encodeWithSelector" [ color = "white" ];
+  "SafeERC20.safeApprove" -> "IERC20.allowance" [ color = "white" ];
+  "SafeERC20.safeApprove" -> "SafeERC20.callOptionalReturn" [ color = "#1bc6a6" ];
+  "SafeERC20.safeApprove" -> "abi.encodeWithSelector" [ color = "white" ];
+  "SafeERC20.safeIncreaseAllowance" -> "IERC20.allowance" [ color = "white" ];
+  "SafeERC20.safeIncreaseAllowance" -> "SafeERC20.callOptionalReturn" [ color = "#1bc6a6" ];
+  "SafeERC20.safeIncreaseAllowance" -> "abi.encodeWithSelector" [ color = "white" ];
+  "SafeERC20.safeDecreaseAllowance" -> "IERC20.allowance" [ color = "white" ];
+  "SafeERC20.safeDecreaseAllowance" -> "SafeERC20.callOptionalReturn" [ color = "#1bc6a6" ];
+  "SafeERC20.safeDecreaseAllowance" -> "abi.encodeWithSelector" [ color = "white" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.isContract" [ color = "white" ];
+  "SafeERC20.callOptionalReturn" -> "IERC20.call" [ color = "white" ];
+  "SafeERC20.callOptionalReturn" -> "abi.decode" [ color = "white" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="#445773">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="#e8726d">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color="#1bc6a6"]
+key:i2:e -> key2:i2:w [color="white"]
+}
+}

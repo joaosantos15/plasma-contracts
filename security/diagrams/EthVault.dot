@@ -1,0 +1,97 @@
+digraph G {
+  graph [ ratio = "auto", page = "100", compound =true ];
+subgraph "clusterEthVault" {
+  graph [ label = "EthVault", color = "lightgray", style = "filled" ];
+  "EthVault.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "EthVault.deposit" [ label = "deposit", color = "blue" ];
+  "EthVault.withdraw" [ label = "withdraw", color = "blue" ];
+  "EthVault.getEffectiveDepositVerifier" [ label = "getEffectiveDepositVerifier" ];
+}
+
+subgraph "clusterVault" {
+  graph [ label = "Vault", color = "lightgray", style = "filled" ];
+  "Vault._submitDepositBlock" [ label = "_submitDepositBlock", color = "white" ];
+  "Vault.<Constructor>" [ label = "<Constructor>", color = "green" ];
+  "Vault.onlyFromNonQuarantinedExitGame" [ label = "onlyFromNonQuarantinedExitGame", color = "yellow" ];
+  "Vault.setDepositVerifier" [ label = "setDepositVerifier", color = "green" ];
+  "Vault.getEffectiveDepositVerifier" [ label = "getEffectiveDepositVerifier" ];
+}
+
+subgraph "clusterIEthDepositVerifier" {
+  graph [ label = "IEthDepositVerifier", color = "lightgray" ];
+  "IEthDepositVerifier.verify" [ label = "verify" ];
+}
+
+subgraph "cluster_target" {
+  graph [ label = "_target", color = "lightgray" ];
+  "_target.transfer" [ label = "transfer" ];
+}
+
+subgraph "clusterZeroHashesProvider" {
+  graph [ label = "ZeroHashesProvider", color = "lightgray" ];
+  "ZeroHashesProvider.getZeroHashes" [ label = "getZeroHashes" ];
+}
+
+subgraph "clusterExitGameRegistry" {
+  graph [ label = "ExitGameRegistry", color = "lightgray" ];
+  "ExitGameRegistry.isExitGameSafeToUse" [ label = "isExitGameSafeToUse" ];
+}
+
+subgraph "clusterPlasmaFramework" {
+  graph [ label = "PlasmaFramework", color = "lightgray" ];
+  "PlasmaFramework.submitDepositBlock" [ label = "submitDepositBlock" ];
+  "PlasmaFramework.minExitPeriod" [ label = "minExitPeriod" ];
+}
+
+  "EthVault.deposit";
+  "IEthDepositVerifier.verify";
+  "EthVault.getEffectiveDepositVerifier";
+  "Vault._submitDepositBlock";
+  "EthVault.withdraw";
+  "_target.transfer";
+  "Vault.null";
+  "ZeroHashesProvider.getZeroHashes";
+  "Vault.onlyFromNonQuarantinedExitGame";
+  "ExitGameRegistry.isExitGameSafeToUse";
+  "PlasmaFramework.submitDepositBlock";
+  "Vault.setDepositVerifier";
+  "Vault.getEffectiveDepositVerifier";
+  "PlasmaFramework.minExitPeriod";
+  "EthVault.deposit" -> "IEthDepositVerifier.verify" [ color = "orange" ];
+  "EthVault.deposit" -> "EthVault.getEffectiveDepositVerifier" [ color = "green" ];
+  "EthVault.deposit" -> "Vault._submitDepositBlock" [ color = "orange" ];
+  "EthVault.withdraw" -> "_target.transfer" [ color = "orange" ];
+  "Vault.null" -> "ZeroHashesProvider.getZeroHashes" [ color = "orange" ];
+  "Vault.onlyFromNonQuarantinedExitGame" -> "ExitGameRegistry.isExitGameSafeToUse" [ color = "orange" ];
+  "Vault._submitDepositBlock" -> "PlasmaFramework.submitDepositBlock" [ color = "orange" ];
+  "Vault.setDepositVerifier" -> "Vault.getEffectiveDepositVerifier" [ color = "green" ];
+  "Vault.setDepositVerifier" -> "PlasmaFramework.minExitPeriod" [ color = "orange" ];
+
+
+rankdir=LR
+node [shape=plaintext]
+subgraph cluster_01 { 
+label = "Legend";
+key [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td align="right" port="i1">Internal Call</td></tr>
+  <tr><td align="right" port="i2">External Call</td></tr>
+  <tr><td align="right" port="i3">Defined Contract</td></tr>
+  <tr><td align="right" port="i4">Undefined Contract</td></tr>
+  </table>>]
+key2 [label=<<table border="0" cellpadding="2" cellspacing="0" cellborder="0">
+  <tr><td port="i1">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i2">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i3" bgcolor="lightgray">&nbsp;&nbsp;&nbsp;</td></tr>
+  <tr><td port="i4">
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="7" color="lightgray">
+      <tr>
+       <td></td>
+      </tr>
+     </table>
+  </td></tr>
+  </table>>]
+key:i1:e -> key2:i1:w [color=green]
+key:i2:e -> key2:i2:w [color=orange]
+}
+}
+
