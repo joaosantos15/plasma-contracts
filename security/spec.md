@@ -8,13 +8,13 @@ The goal of this document is ...
 
 The following roles exist in the root chain contracts as well as in the OMG network components, the child chain and the watcher.
 
-- Operator: Runs the child chain and is authorised to create child chain blocks and submit them (root hash) to the root chain.
+- Operator: Runs the child chain and is authorized to create child chain blocks and submit them (root hash) to the root chain.
 - Watcher: Runs an observing node that connects to the root chain and the child chain server's API. User ensures that the child chain is valid and notifies otherwise.
 - Plasma User: EOA that has assets on the root chain and who uses them on the OMG network.
 - Authority: EOA used exclusively to submit plasma block hashes to the root chain. The child chain assumes at deployment that the authority account has nonce zero and no transactions have been sent from it.
 - Deployer: EOA used to deploy all root chain contracts. 
-- Maintainer: MultiSig wallet that is allowed to initiate upgrades of specific root chain contracts.
-- Contract: An root chain contract that is authorised to call specific functions in other root chain contrats.
+- Maintainer: MultiSig wallet that is allowed to initiate upgrades/updates of specific parts of the root chain contracts. Can also update the exit bond size. 
+- Contract: A root chain contract that is authorized to call specific functions in other root chain contracts.
 
 ### Todo 
 
@@ -27,7 +27,7 @@ The term component is used in this document to refer to contracts that are deplo
 
 ## EthVault 
 
-Check the UXTO Based Plasma Abstract Layer Design document for detailed information of Vault desgin consideration (see [1](https://docs.google.com/document/d/1PSxLnMskjqje4MksmW2msSSg-GtZoBSMNYey9nEDvt8/edit#heading=h.ksu0dgzqozk)).
+Check the UXTO Based Plasma Abstract Layer Design document for detailed information of Vault design consideration (see [1](https://docs.google.com/document/d/1PSxLnMskjqje4MksmW2msSSg-GtZoBSMNYey9nEDvt8/edit#heading=h.ksu0dgzqozk)).
 
 
 
@@ -37,20 +37,19 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 
 ### Access Matrix 
 
-| Function  | Role | 
-|---|---|
-|  EthVault.constuctor, Vault.constructor, Operated.constructor | Deployer |
-|  deposit | Plasma User  | 
-|  withdraw |  Plasma User |
-|  setDepositVerifier | Maintainer  |
+| Function  | Role | Description | 
+|---|---|---|
+|  EthVault.constuctor, Vault.constructor, Operated.constructor | Deployer | Sets the address to the PlasmaFramework contract. Sets the Maintainer address. |
+|  deposit | Plasma User  | Transfer ETH to the root chain contract |
+|  setDepositVerifier | Maintainer | Add a new DepositVerifier contract that will be active after `minExitPeriod` | 
 
 ### Storgage 
 
 ```Solidity 
-    PlasmaFramework internal framework
-    bytes32[16] internal EthDepositVerifier
-    address[2] public depositVerifiers
-    uint256 public newDepositVerifierMaturityTimestamp
+    PlasmaFramework internal framework;
+    bytes32[16] internal zeroHashes;
+    address[2] public depositVerifiers;
+    uint256 public newDepositVerifierMaturityTimestamp = 2 ** 255
     address private _operator
 ```
 
@@ -63,7 +62,9 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 ### Todo 
 
 - [ ] Rename operator to maintainer. Set the address during deployment.
-- [ ] Check MIN_EXIT_PERIOD is enough for users to actually withdraw their funds  
+- [ ] Check: MIN_EXIT_PERIOD is enough for users to actually withdraw their funds  
+- [ ] Check: Is it possible to remove the encoded tx and instead construct the it in the contract?
+- [ ] Audit: Trick the Vaults to register deposits without sending sufficient funds by messing with RLP encoded tx 
 
 ## EthDepositVerifier 
 
@@ -73,9 +74,9 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 
 ### Access Matrix 
 
-| Function  | Role | 
-|---|---|
-|  verify | Intended to be used by EthVault. Can be called by anyone though | 
+| Function  | Role | Description |
+|---|---|---|
+|  verify | Intended to be used by EthVault. Can be called by anyone though | Verify that a deposit tx is valid | 
 
 ### Storgage 
 
@@ -93,7 +94,28 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 
 ### Access Matrix 
 
+| Function  | Role | Description | 
+|---|---|---|
+|  Erc20.constuctor, Vault.constructor, Operated.constructor | Deployer | Sets the address to the `PlasmaFramework` contract and the Maintainer address. |
+|  deposit | Plasma User  | Transfer Erc20 tokens to the root chain contract |
+|  withdraw | Contract: none quarantined ExitGame |  Withdraw Erc20 tokens from the root chain contract | 
+|  setDepositVerifier | Maintainer | Add a new DepositVerifier contract that will be active after `minExitPeriod` | 
+
 ### Storgage 
+
+```Solidity 
+    PlasmaFramework internal framework;
+    bytes32[16] internal zeroHashes;
+    address[2] public depositVerifiers;
+    uint256 public newDepositVerifierMaturityTimestamp = 2 ** 255
+    address private _operator
+```
+
+- `framework`: Links to the PlasmaFramework controller. The address is set during deployment through the constructor
+- `zeroHashes`: Todo 
+- `depositVerifiers`: Sets the deposit verifier contract. If one contract is already set then the new one will be effective after MIN_EXIT_PERIOD
+- `newDepositVerifierMaturityTimestamp`: Set initially to `2 ** 255` and then to `now + framework.minExitPeriod();` when a new Erc20DepositVerifier gets added. 
+- `_operator`: Maintainer address is able to upgrade the Erc20DepositVerifier that is called during depositing tokens.
 
 ## Erc20DepositVerifier
 
@@ -102,6 +124,10 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 ![EthVault](./diagrams/Erc20DepositVerifier.png)
 
 ### Access Matrix 
+
+| Function  | Role | Description |
+|---|---|---|
+|  verify | Intended to be used by EthVault. Can be called by anyone though | Verify that a deposit tx is valid | 
 
 ### Storgage 
 
@@ -113,21 +139,30 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 
 ### Access Matrix 
 
-| Function  | Role | 
-|---|---|
-|  initAuthority | Intended to be used by EthVault. Can be called by anyone though | 
-| setAuthority | | 
-| submitBlock | Authority | 
-| submitDepositBlock | Contact(can only be called by non quaranained Vaults) | 
-
+| Function  | Role | Description |
+|---|---|---|
+| BlockController.constructor | | 
+| initAuthority | Intended to be used by EthVault. Can be called by anyone though. | |
+| setAuthority | | |
+| submitBlock | Authority | |
+| submitDepositBlock | Contract(can only be called by none-quarantined Vaults) | |
+| registerVault | Maintainer | | 
+| registerExitGame | Maintainer | |
+| addToken | Plasma User | |
+| enqueue | Contract(can only be called by none-quarantined ExitGame) | |
+| processExits | Plasma User | |
+| batchFlagOutputsSpent | Contract(can only be called by none-quarantined ExitGame | |
+| flagOutputSpent | Contract(can only be called by none-quarantined ExitGame | |
 
 
 ### Todo 
 
 - [ ] Shouldn't submitDepositBlock be external as it should only be callable from a Vault?
 - [ ] Create a modifier for submitBlock() ... onlyAuthority
-- [ ] Why do we need an upgradeable Autority address?
+- [ ] Why do we need an upgradeable Authority address?
 - [ ] The current design with calling init() after contract creation is susceptible to front running 
+- [ ] Change to getVaultId and getVaultAddress 
+
 
 ### Storgage 
 
@@ -160,11 +195,36 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 
 ```
 
+### PriorityQueue
+
+### Contract diagram  
+
+![PriorityQueue](./diagrams/PriorityQueue.png)
+
+### Access Matrix 
+
+| Function  | Role | Description |
+|---|---|---|
+| constructor | Deployer |  | 
+| insert | Contract:PlasmaFramework |  | 
+| delMin | Contract:PlasmaFramework |  |
+
+### Storgage 
+
+```Solidity 
+    struct Queue {
+        uint256[] heapList;
+        uint256 currentSize;
+    }
+
+    Queue internal queue;
+```
+
 ## PaymentExitGame
 
 ### Contract diagram  
 
-![EthVault](./diagrams/PaymentExitGame.png)
+![PaymentExitGame](./diagrams/PaymentExitGame.png)
 
 ### Access Matrix 
 
@@ -204,6 +264,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
     PaymentProcessInFlightExit.Controller internal processInflightExitController;
     PaymentChallengeIFEOutputSpent.Controller internal challengeOutputSpentController;
 ```
+
 
 
 ## SpendingConditionRegistry
