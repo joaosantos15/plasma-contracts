@@ -229,19 +229,19 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 ### Access Matrix 
 
 
-| Function  | Role | 
-|---|---|
-| processExit | Contract:PlasmaFramework |
-| updateStartStandardExitBondSize  | Maintainer | 
-| startStandardExit | Plasma User |
-| challengeStandardExit | Plasma User |
-| startInFlightExit | Plasma User |
-| piggybackInFlightExitOnInput | Plasma User |
-| piggybackInFlightExitOnOutput | Plasma User |
-| challengeInFlightExitNotCanonical | Plasma User |
-| respondToNonCanonicalChallenge | Plasma User |
-| challengeInFlightExitInputSpent | Plasma User |
-| challengeInFlightExitOutputSpent | Plasma User |
+| Function  | Role |  Description |
+|---|---|---|
+| processExit | Contract:PlasmaFramework | | 
+| updateStartStandardExitBondSize  | Maintainer |  |
+| startStandardExit | Plasma User |  |
+| challengeStandardExit | Plasma User |  |
+| startInFlightExit | Plasma User |  |
+| piggybackInFlightExitOnInput | Plasma User |  |
+| piggybackInFlightExitOnOutput | Plasma User |  |
+| challengeInFlightExitNotCanonical | Plasma User |  |
+| respondToNonCanonicalChallenge | Plasma User |  |
+| challengeInFlightExitInputSpent | Plasma User |  |
+| challengeInFlightExitOutputSpent | Plasma User |  |
 
 
 ### Storgage 
@@ -265,15 +265,17 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
     PaymentChallengeIFEOutputSpent.Controller internal challengeOutputSpentController;
 ```
 
-
-
 ## SpendingConditionRegistry
 
 ### Contract diagram  
 
-![EthVault](./diagrams/SpendingConditionRegistry.png)
+![SpendingConditionRegistry](./diagrams/SpendingConditionRegistry.png)
 
 ### Access Matrix 
+
+| Function  | Role |  Description |
+|---|---|---|
+| registerSpendingCondition | Maintainer | Register a spending condition contract| 
 
 ### Storgage 
 
@@ -287,10 +289,13 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 
 ### Contract diagram  
 
-![EthVault](./diagrams/OutputGuardHandlerRegistry.png)
+![OutputGuardHandlerRegistry](./diagrams/OutputGuardHandlerRegistry.png)
 
 ### Access Matrix 
 
+| Function  | Role |  Description |
+|---|---|---|
+| registerOutputGuardHandler | Maintainer | register output guard handler contract | 
 
 ### Storgage 
 
@@ -298,3 +303,39 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
     mapping(uint256 => IOutputGuardHandler) public outputGuardHandlers
     address public owner
 ```
+
+
+## PaymentTransactionStateTransitionVerifier
+
+### Contract diagram  
+
+![PaymentTransactionStateTransitionVerifier](./diagrams/PaymentTransactionStateTransitionVerifier.png)
+
+### Access Matrix 
+
+| Function  | Role |  Description |
+|---|---|---|
+| isCorrectStateTransition | Plasma User | | 
+
+### Storgage 
+
+
+## PaymentOutputToPaymentTxCondition
+
+### Contract diagram  
+
+![PaymentOutputToPaymentTxCondition](./diagrams/PaymentOutputToPaymentTxCondition.png)
+
+### Access Matrix 
+
+| Function  | Role |  Description |
+|---|---|---|
+| verify | Plasma User | | 
+
+### Storgage 
+
+``` Solidity
+    uint256 internal supportInputTxType;
+    uint256 internal supportSpendingTxType;
+    PaymentEip712Lib.Constants internal eip712;
+```    
