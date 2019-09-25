@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export MYTHX_ETH_ADDRESS=0x27fa286dfaccdf3c833aa860914799946d7c02fe
-export MYTHX_PASSWORD=Mutzbaer!1
-
 sabre --mode full ../../plasma_framework/contracts/src/framework/PlasmaFramework.sol PlasmaFramework
 sabre --mode full ../../plasma_framework/contracts/src/vaults/Erc20Vault.sol Erc20Vault
 sabre --mode full ../../plasma_framework/contracts/src/vaults/EthVault.sol Erc20Vault
