@@ -4,6 +4,12 @@ The goal of this document is ...
 
 # Architecture and Design
 
+## Overview
+
+The following diagram shows what actions the administrative roles can perform within the the system. It also reveals which parts are upgradeable and what dependencies exist within the deployed contracts.
+
+![Overview Contracts](./diagrams/contracts-overview.png)
+
 ## Roles 
 
 The following roles exist in the root chain contracts as well as in the OMG network components, the child chain and the watcher.
@@ -15,6 +21,8 @@ The following roles exist in the root chain contracts as well as in the OMG netw
 - Deployer: EOA used to deploy all root chain contracts. 
 - Maintainer: MultiSig wallet that is allowed to initiate upgrades/updates of specific parts of the root chain contracts. Can also update the exit bond size. 
 - Contract: A root chain contract that is authorized to call specific functions in other root chain contracts.
+
+
 
 ### Todo 
 
@@ -39,11 +47,11 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 
 | Function  | Role | Description | 
 |---|---|---|
-|  EthVault.constuctor, Vault.constructor, Operated.constructor | Deployer | Sets the address to the PlasmaFramework contract. Sets the Maintainer address. |
+|  EthVault.constructor, Vault.constructor, Operated.constructor | Deployer | Sets the address to the PlasmaFramework contract. Sets the Maintainer address. |
 |  deposit | Plasma User  | Transfer ETH to the root chain contract |
 |  setDepositVerifier | Maintainer | Add a new DepositVerifier contract that will be active after `minExitPeriod` | 
 
-### Storgage 
+### Storage 
 
 ```Solidity 
     PlasmaFramework internal framework;
@@ -78,7 +86,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 |---|---|---|
 |  verify | Intended to be used by EthVault. Can be called by anyone though | Verify that a deposit tx is valid | 
 
-### Storgage 
+### Storage 
 
 ```Solidity 
      uint8 constant internal DEPOSIT_TX_TYPE
@@ -101,7 +109,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 |  withdraw | Contract: none quarantined ExitGame |  Withdraw Erc20 tokens from the root chain contract | 
 |  setDepositVerifier | Maintainer | Add a new DepositVerifier contract that will be active after `minExitPeriod` | 
 
-### Storgage 
+### Storage 
 
 ```Solidity 
     PlasmaFramework internal framework;
@@ -129,7 +137,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 |---|---|---|
 |  verify | Intended to be used by EthVault. Can be called by anyone though | Verify that a deposit tx is valid | 
 
-### Storgage 
+### Storage 
 
 ## PlasmaFramework
 
@@ -164,7 +172,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 - [ ] Change to getVaultId and getVaultAddress 
 
 
-### Storgage 
+### Storage 
 
 ```Solidity 
     uint256 public constant CHILD_BLOCK_INTERVAL
@@ -209,7 +217,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 | insert | Contract:PlasmaFramework |  | 
 | delMin | Contract:PlasmaFramework |  |
 
-### Storgage 
+### Storage 
 
 ```Solidity 
     struct Queue {
@@ -244,7 +252,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 | challengeInFlightExitOutputSpent | Plasma User |  |
 
 
-### Storgage 
+### Storage 
 
 ```Solidity 
     PlasmaFramework private plasmaFramework
@@ -277,7 +285,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 |---|---|---|
 | registerSpendingCondition | Maintainer | Register a spending condition contract| 
 
-### Storgage 
+### Storage 
 
 ```
     mapping(bytes32 => ISpendingCondition) internal _spendingConditions;
@@ -297,7 +305,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 |---|---|---|
 | registerOutputGuardHandler | Maintainer | register output guard handler contract | 
 
-### Storgage 
+### Storage 
 
 ```
     mapping(uint256 => IOutputGuardHandler) public outputGuardHandlers
@@ -317,7 +325,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 |---|---|---|
 | isCorrectStateTransition | Plasma User | | 
 
-### Storgage 
+### Storage 
 
 
 ## PaymentOutputToPaymentTxCondition
@@ -332,7 +340,7 @@ Check the UXTO Based Plasma Abstract Layer Design document for detailed informat
 |---|---|---|
 | verify | Plasma User | | 
 
-### Storgage 
+### Storage 
 
 ``` Solidity
     uint256 internal supportInputTxType;
