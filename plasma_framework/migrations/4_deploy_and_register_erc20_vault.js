@@ -9,7 +9,7 @@ module.exports = async (deployer) => {
     const erc20Vault = await deployer.deploy(
         Erc20Vault,
         PlasmaFramework.address,
-        { from: global.authorityAddress }
+        { from: global.authorityAddress },
     );
     await erc20Vault.setDepositVerifier(erc20DepositVerifier.address, { from: global.authorityAddress });
 

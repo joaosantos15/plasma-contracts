@@ -11,9 +11,11 @@ module.exports = async (_) => {
     const paymentExitGame = await plasmaFramework.exitGames(TX_TYPE.PAYMENT);
 
     console.log(JSON.stringify({
+        plasma_framework_tx_hash: `${PlasmaFramework.network.transactionHash}`.toLowerCase(),
         plasma_framework: `${PlasmaFramework.address}`.toLowerCase(),
         eth_vault: `${ethVault}`.toLowerCase(),
         erc20_vault: `${erc20Vault}`.toLowerCase(),
         payment_exit_game: `${paymentExitGame}`.toLowerCase(),
+        authority_address: `${global.authorityAddress}`.toLowerCase(),
     }));
 };

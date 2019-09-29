@@ -9,7 +9,7 @@ module.exports = async (deployer) => {
     const ethVault = await deployer.deploy(
         EthVault,
         PlasmaFramework.address,
-        { from: global.authorityAddress }
+        { from: global.authorityAddress },
     );
     await ethVault.setDepositVerifier(ethDepositVerifier.address, { from: global.authorityAddress });
 
