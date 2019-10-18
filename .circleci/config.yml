@@ -43,16 +43,18 @@ commands:
             sudo apt update && sudo apt install nodejs npm
             sudo npm install -g n && sudo n stable
             sudo npm install -g ganache-cli
+            # run after npm install to make sure 'node_module' folder exists
+            sudo chown -R circleci:circleci /usr/local/lib/node_modules
       - restore_cache:
           keys:
-            - dependencies_v1_{{ checksum "requirements.txt" }}
+            - dependencies-v1-test-{{ checksum "requirements.txt" }}
       - run:
           name: Install dependencies
           command: |
             make init dev
             python -m solcx.install v0.5.11
       - save_cache:
-          key: dependencies-{{ checksum "requirements.txt" }}
+          key: dependencies-v1-test-{{ checksum "requirements.txt" }}
           paths:
             - /usr/local/bin
             - /usr/local/lib/python3.7/site-packages
