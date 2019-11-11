@@ -1,0 +1,27 @@
+name: Auto Docgen
+
+on:
+  push:
+    branches:
+        - test_auto_docgen
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: npm install
+      run: npm install
+    - name: run doc gen
+      run: npm run docgen
+      working-directory: ./plasma_framework
+      env:
+        CI: true
+    - name: git auto commit docgen changes
+      uses: stefanzweifel/git-auto-commit-action@v2.3.0
+      with:
+        commit_message: "docs: run docgen"
+        branch: ${{ github.head_ref }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
