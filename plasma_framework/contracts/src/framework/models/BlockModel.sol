@@ -1,5 +1,8 @@
 pragma solidity 0.5.11;
 
+/**
+ * @notice Test adding sth whether it can trigger auto test or not
+ */
 library BlockModel {
     /**
      * @notice Block data structure that is stored in the contract
