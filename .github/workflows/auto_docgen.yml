@@ -26,13 +26,9 @@ jobs:
         working-directory: ./plasma_framework
         env:
           CI: true
-      - name: Commit files
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "run docgen" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - uses: boolafish/git-auto-commit-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: "docs: run docgen"
           branch: test_auto_docgen
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
