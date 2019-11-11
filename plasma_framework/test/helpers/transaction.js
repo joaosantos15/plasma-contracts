@@ -69,10 +69,40 @@ class PlasmaDepositTransaction extends PaymentTransaction {
     }
 }
 
+/**
+ * Fee Nonce Output is the output data structure that would be holding a nonce
+ * for Fee transaction. This nonce is to make sure the fee transaction would be unique
+ * to avoid some issue such as replay attack or colliding on id schemas.
+ */
+class FeeNonceOutput {
+    constructor(type, nonce) {
+        this.outputType = type;
+        this.nonce = nonce;
+    }
+
+    formatForRlpEncoding() {
+        return [this.outputType, this.nonce];
+    }
+
+    rlpEncoded() {
+        return rlp.encode(this.formatForRlpEncoding());
+    }
+}
+
+/**
+ * Fee Transaction is not really following the full rule of WireTransaction.
+ * It would have two output data structure:
+ * 1. WireTransactionOutput
+ * 2. FeeNonceOutput
+ */
+class FeeTransaction extends WireTransaction {}
+
 module.exports = {
     PaymentTransaction,
     PlasmaDepositTransaction,
     PaymentTransactionOutput,
     WireTransaction,
     WireTransactionOutput,
+    FeeNonceOutput,
+    FeeTransaction,
 };

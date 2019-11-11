@@ -1,6 +1,11 @@
 const { constants } = require('openzeppelin-test-helpers');
 const { UtxoPos } = require('./positions.js');
 
+const INPUT_SCHEMA = {
+    UTXO_POS: 1,
+    OUTPUT_ID: 2,
+};
+
 const EMPTY_BYTES32 = '0x0000000000000000000000000000000000000000000000000000000000000000';
 const EMPTY_BYTES20 = '0x0000000000000000000000000000000000000000';
 
@@ -11,16 +16,25 @@ const INPUT_TYPE_HASH = web3.utils.sha3('Input(uint256 blknum,uint256 txindex,ui
 const OUTPUT_TYPE_HASH = web3.utils.sha3('Output(uint256 outputType,bytes20 outputGuard,address currency,uint256 amount)');
 const SALT = '0xfad5c7f626d80f9256ef01929f3beb96e058b8b4b0e3fe52d84f054c0e2a7a83';
 
-const hashInput = (input) => {
-    const utxoPos = new UtxoPos(input);
+const hashInput = (input, schema = INPUT_SCHEMA.UTXO_POS) => {
+    if (schema === INPUT_SCHEMA.UTXO_POS) {
+        const utxoPos = new UtxoPos(input);
+
+        return web3.utils.sha3(web3.eth.abi.encodeParameters([
+            'bytes32', 'uint256', 'uint256', 'uint256',
+        ], [
+            INPUT_TYPE_HASH,
+            utxoPos.blockNum,
+            utxoPos.txIndex,
+            utxoPos.outputIndex,
+        ]));
+    }
 
     return web3.utils.sha3(web3.eth.abi.encodeParameters([
-        'bytes32', 'uint256', 'uint256', 'uint256',
+        'bytes32', 'bytes32',
     ], [
         INPUT_TYPE_HASH,
-        utxoPos.blockNum,
-        utxoPos.txIndex,
-        utxoPos.outputIndex,
+        input,
     ]));
 };
 
@@ -36,7 +50,7 @@ const hashOutput = output => web3.utils.sha3(
     ]),
 );
 
-const hashTx = (tx, verifyingContract) => {
+const hashTx = (tx, verifyingContract, inputSchema = INPUT_SCHEMA.UTXO_POS) => {
     const domainSeparator = web3.utils.sha3(web3.eth.abi.encodeParameters([
         'bytes32', 'bytes32', 'bytes32', 'address', 'bytes32',
     ], [
@@ -47,10 +61,11 @@ const hashTx = (tx, verifyingContract) => {
         SALT,
     ]));
 
-    const inputs = tx.inputs.map(hashInput);
+    const inputs = tx.inputs.map(input => hashInput(input, inputSchema));
     const outputs = tx.outputs.map(hashOutput);
 
-    const HASH_EMPTY_INPUT = hashInput(0);
+    const emptyInput = inputSchema === INPUT_SCHEMA.UTXO_POS ? 0 : EMPTY_BYTES32;
+    const HASH_EMPTY_INPUT = hashInput(emptyInput, inputSchema);
     const HASH_EMPTY_OUTPUT = hashOutput({
         outputType: 0, outputGuard: EMPTY_BYTES20, token: constants.ZERO_ADDRESS, amount: 0,
     });
@@ -77,4 +92,9 @@ const hashTx = (tx, verifyingContract) => {
     );
 };
 
-module.exports = { hashTx, hashInput, hashOutput };
+module.exports = {
+    hashTx,
+    hashInput,
+    hashOutput,
+    INPUT_SCHEMA,
+};
