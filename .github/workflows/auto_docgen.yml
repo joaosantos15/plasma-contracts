@@ -6,26 +6,33 @@ on:
         - test_auto_docgen
 
 jobs:
-  build:
+  auto-docgen:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
         with:
-          node-version: 12
-    - name: npm install
-      run: npm install
-      working-directory: ./plasma_framework
-    - name: run doc gen
-      run: npm run docgen
-      working-directory: ./plasma_framework
-      env:
-        CI: true
-    - name: git auto commit docgen changes
-      uses: stefanzweifel/git-auto-commit-action@v2.3.0
-      with:
-        commit_message: "docs: run docgen"
-        branch: ${{ github.head_ref }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+      - run: npm install
+        working-directory: ./plasma_framework
+      - name: run doc gen
+        run: npm run docgen
+        working-directory: ./plasma_framework
+        env:
+          CI: true
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "run docgen" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: test_auto_docgen
