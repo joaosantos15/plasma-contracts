@@ -17,16 +17,17 @@ module.exports = async (
         config.registerKeys.txTypes.payment,
         config.registerKeys.outputTypes.payment,
     );
-    const erc20DepositVerifier = await Erc20DepositVerifier.deployed();
 
-    await deployer.deploy(Erc20Vault, plasmaFramework.address, { from: maintainerAddress });
-    const erc20Vault = await Erc20Vault.deployed();
+    await deployer.deploy(Erc20Vault, plasmaFramework.address);
 
-    await erc20Vault.setDepositVerifier(erc20DepositVerifier.address, { from: maintainerAddress });
-
-    await plasmaFramework.registerVault(
-        config.registerKeys.vaultId.erc20,
-        erc20Vault.address,
-        { from: maintainerAddress },
-    );
+    if (process.env.DEPLOYMENT_ENV !== 'production') {
+        const erc20Vault = await Erc20Vault.deployed();
+        await plasmaFramework.registerVault(
+            config.registerKeys.vaultId.erc20,
+            erc20Vault.address,
+            { from: maintainerAddress },
+        );
+        const erc20DepositVerifier = await Erc20DepositVerifier.deployed();
+        await erc20Vault.setDepositVerifier(erc20DepositVerifier.address, { from: maintainerAddress });
+    }
 };

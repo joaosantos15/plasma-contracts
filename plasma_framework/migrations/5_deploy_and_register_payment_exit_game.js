@@ -126,22 +126,24 @@ module.exports = async (
     );
     await spendingConditionRegistry.renounceOwnership();
 
-    const paymentExitGameArgs = [
-        plasmaFramework.address,
-        config.registerKeys.vaultId.eth,
-        config.registerKeys.vaultId.erc20,
-        spendingConditionRegistry.address,
-        stateVerifier.address,
-        PAYMENT_TX_TYPE,
-        config.frameworks.safeGasStipend.v1,
-    ];
-    const paymentExitGame = await deployer.deploy(PaymentExitGame, paymentExitGameArgs);
+    if (process.env.DEPLOYMENT_ENV !== 'production') {
+        const paymentExitGameArgs = [
+            plasmaFramework.address,
+            config.registerKeys.vaultId.eth,
+            config.registerKeys.vaultId.erc20,
+            spendingConditionRegistry.address,
+            stateVerifier.address,
+            PAYMENT_TX_TYPE,
+            config.frameworks.safeGasStipend.v1,
+        ];
+        const paymentExitGame = await deployer.deploy(PaymentExitGame, paymentExitGameArgs);
 
-    // register the exit game to framework
-    await plasmaFramework.registerExitGame(
-        PAYMENT_TX_TYPE,
-        paymentExitGame.address,
-        config.frameworks.protocols.moreVp,
-        { from: maintainerAddress },
-    );
+        // register the exit game to framework
+        await plasmaFramework.registerExitGame(
+            PAYMENT_TX_TYPE,
+            paymentExitGame.address,
+            config.frameworks.protocols.moreVp,
+            { from: maintainerAddress },
+        );
+    }
 };

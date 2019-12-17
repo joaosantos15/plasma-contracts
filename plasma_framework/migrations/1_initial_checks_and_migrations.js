@@ -50,7 +50,7 @@ module.exports = async (
     console.log('\n########################### Notice ############################');
     console.log('It is recommended to have 0.2 ETH in the maintainer and authority address');
     console.log('With 1.0 ETH in the deployer address');
-    console.log('Otherwise the deployement might fail');
+    console.log('Otherwise the deployment might fail');
     console.log('###############################################################\n');
 
     // Deploy migrations

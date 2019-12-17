@@ -18,5 +18,7 @@ module.exports = async (
     );
 
     const plasmaFramework = await PlasmaFramework.deployed();
-    await plasmaFramework.activateChildChain({ from: authorityAddress });
+    if (process.env.DEPLOYMENT_ENV !== 'production') {
+        await plasmaFramework.activateChildChain({ from: authorityAddress });
+    }
 };
